@@ -21,6 +21,8 @@
 @layer base {
   :root {
     /* Monochrome Technical Palette */
+    --header-height: 76px;
+    /* Mobile default */
     --background: 0 0% 100%;
     --foreground: 220 15% 10%;
 
@@ -90,32 +92,48 @@
   .dark {
     --background: 220 20% 6%;
     --foreground: 0 0% 96%;
-
-    --card: 220 15% 10%;
-    --card-foreground: 0 0% 96%;
-
-    --popover: 220 15% 10%;
-    --popover-foreground: 0 0% 96%;
-
-    --primary: 0 0% 96%;
-    --primary-foreground: 220 20% 8%;
-
-    --secondary: 220 15% 15%;
-    --secondary-foreground: 0 0% 96%;
-
-    --muted: 220 15% 15%;
-    --muted-foreground: 220 8% 60%;
-
-    --accent: 215 20% 55%;
-    --accent-foreground: 220 20% 8%;
-
-    --destructive: 0 63% 31%;
-    --destructive-foreground: 0 0% 100%;
-
-    --border: 220 15% 20%;
-    --input: 220 15% 20%;
-    --ring: 215 20% 55%;
+    /* ... (keep other vars) ... */
   }
+
+  /* Custom Easings */
+  :root {
+    --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+    --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --ease-premium: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --header-height: 88px;
+  }
+}
+
+--card: 220 15% 10%;
+--card-foreground: 0 0% 96%;
+
+--popover: 220 15% 10%;
+--popover-foreground: 0 0% 96%;
+
+--primary: 0 0% 96%;
+--primary-foreground: 220 20% 8%;
+
+--secondary: 220 15% 15%;
+--secondary-foreground: 0 0% 96%;
+
+--muted: 220 15% 15%;
+--muted-foreground: 220 8% 60%;
+
+--accent: 215 20% 55%;
+--accent-foreground: 220 20% 8%;
+
+--destructive: 0 63% 31%;
+--destructive-foreground: 0 0% 100%;
+
+--border: 220 15% 20%;
+--input: 220 15% 20%;
+--ring: 215 20% 55%;
+}
 }
 
 @layer base {
@@ -249,6 +267,57 @@
   /* Page hero section base */
   .page-hero {
     @apply pt-32 pb-20 lg:pt-40 lg:pb-28 bg-primary relative overflow-hidden;
+  }
+
+  /* Hero Entrance Animations */
+  .animate-hero-up {
+    animation: heroSlideUp 700ms var(--ease-premium) forwards;
+    opacity: 0;
+  }
+
+  .animate-hero-fade {
+    animation: heroFadeIn 600ms var(--ease-premium) forwards;
+    opacity: 0;
+  }
+
+  .animate-hero-scale {
+    animation: heroScaleIn 500ms var(--ease-premium) forwards;
+    opacity: 0;
+    transform: scale(0.96);
+  }
+
+  @keyframes heroSlideUp {
+    from {
+      opacity: 0;
+      transform: translateY(16px) translateZ(0);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0) translateZ(0);
+    }
+  }
+
+  @keyframes heroFadeIn {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes heroScaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.96);
+    }
+
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
   }
 
   /* Category badge */

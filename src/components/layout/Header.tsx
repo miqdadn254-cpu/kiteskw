@@ -42,7 +42,7 @@ export function Header() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      setIsScrolled(window.scrollY > 40);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -63,14 +63,14 @@ export function Header() {
     <>
       <header
         className={cn(
-          "fixed top-0 inset-x-0 z-50 transition-all duration-300 ease-in-out",
+          "fixed top-0 inset-x-0 z-50 transition-all duration-300 ease-in-out h-[var(--header-height)] flex items-center",
           isScrolled
-            ? "bg-primary/98 backdrop-blur-md shadow-md py-0"
-            : "bg-primary py-2"
+            ? "bg-[#0B0F14]/95 backdrop-blur-md shadow-md border-b border-white/10"
+            : "bg-transparent backdrop-blur-sm border-b border-transparent"
         )}
       >
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-[72px] lg:h-[80px] transition-all duration-300">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 h-full">
+          <div className="flex items-center justify-between h-full transition-all duration-300">
             {/* Logo */}
             <Link to="/" className="flex items-center shrink-0 group gap-[14px]">
               <img
@@ -90,8 +90,8 @@ export function Header() {
                   key={item.key}
                   to={item.href}
                   className={({ isActive }) => cn(
-                    "relative py-2 text-primary-foreground/90 hover:text-primary-foreground font-body text-lg font-medium transition-colors duration-200",
-                    "after:absolute after:-bottom-1 after:left-0 after:right-0 after:h-[2px] after:bg-primary-foreground after:origin-center after:transition-transform after:duration-300",
+                    "relative py-2 text-white/90 hover:text-white font-body text-lg font-medium transition-colors duration-200",
+                    "after:absolute after:-bottom-1 after:left-0 after:right-0 after:h-[2px] after:bg-white after:origin-center after:transition-transform after:duration-300",
                     isActive ? "after:scale-x-100 text-white font-semibold" : "after:scale-x-0 hover:after:scale-x-100"
                   )}
                 >
@@ -106,18 +106,18 @@ export function Header() {
                 onClick={() => setLanguage("en")}
                 className={cn(
                   "px-3 py-1.5 text-base font-body font-medium transition-colors duration-200",
-                  language === "en" ? "text-primary-foreground" : "text-primary-foreground/50 hover:text-primary-foreground/80"
+                  language === "en" ? "text-white" : "text-white/60 hover:text-white/90"
                 )}
                 aria-label="Switch to English"
               >
                 EN
               </button>
-              <span className="text-primary-foreground/30">|</span>
+              <span className="text-white/30">|</span>
               <button
                 onClick={() => setLanguage("ar")}
                 className={cn(
                   "px-3 py-1.5 text-base font-body font-medium transition-colors duration-200",
-                  language === "ar" ? "text-primary-foreground" : "text-primary-foreground/50 hover:text-primary-foreground/80"
+                  language === "ar" ? "text-white" : "text-white/60 hover:text-white/90"
                 )}
                 aria-label="Switch to Arabic"
               >
@@ -128,7 +128,7 @@ export function Header() {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="lg:hidden p-2 text-primary-foreground/80 hover:text-primary-foreground transition-colors"
+              className="lg:hidden p-2 text-white/90 hover:text-white transition-colors"
               aria-label="Toggle menu"
             >
               {isOpen ? <X size={28} strokeWidth={1.5} /> : <Menu size={28} strokeWidth={1.5} />}
@@ -154,11 +154,11 @@ export function Header() {
 
         <div
           className={cn(
-            "absolute top-0 end-0 h-full w-full max-w-sm bg-primary transition-transform duration-200 ease-out",
+            "absolute top-0 end-0 h-full w-full max-w-sm bg-[#0B0F14] transition-transform duration-200 ease-out",
             isOpen ? "translate-x-0 rtl:-translate-x-0" : "translate-x-full rtl:-translate-x-full"
           )}
         >
-          <div className="flex items-center justify-between h-[72px] px-6 border-b border-primary-foreground/10">
+          <div className="flex items-center justify-between h-[76px] px-6 border-b border-white/10">
             <Link to="/" onClick={() => setIsOpen(false)} className="flex items-center gap-[14px]">
               <img
                 src={kitesLogo}
@@ -171,7 +171,7 @@ export function Header() {
             </Link>
             <button
               onClick={() => setIsOpen(false)}
-              className="p-2 text-primary-foreground/80 hover:text-primary-foreground transition-colors"
+              className="p-2 text-white/90 hover:text-white transition-colors"
               aria-label="Close menu"
             >
               <X size={28} strokeWidth={1.5} />

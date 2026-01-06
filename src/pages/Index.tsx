@@ -2,7 +2,7 @@ import { SEO } from "@/components/common/SEO";
 import { SkipLink } from "@/components/common/SkipLink";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { HeroSection } from "@/components/sections/HeroSection";
+import { Hero } from "@/components/home/Hero";
 import { WhoWeAreSection } from "@/components/sections/WhoWeAreSection";
 import { ServicesSection } from "@/components/sections/ServicesSection";
 import { PartnersSection } from "@/components/sections/PartnersSection";
@@ -18,7 +18,7 @@ const Index = () => {
         <Header />
         <main id="main-content">
           {/* 1. Hero Section */}
-          <HeroSection />
+          <Hero />
 
           {/* 2. Who We Are */}
           <WhoWeAreSection />
