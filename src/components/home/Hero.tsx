@@ -9,6 +9,7 @@ import { FlowFieldCanvas } from "@/components/home/FlowFieldCanvas";
 export function Hero() {
     const { language, isRTL } = useLanguage();
     const [scrollY, setScrollY] = useState(0);
+    const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
     useEffect(() => {
         const handleScroll = () => {
@@ -16,8 +17,21 @@ export function Hero() {
                 setScrollY(window.scrollY);
             });
         };
+
+        const handleMouseMove = (e: MouseEvent) => {
+            requestAnimationFrame(() => {
+                const x = (e.clientX / window.innerWidth - 0.5) * 10; // +/- 5px movement
+                const y = (e.clientY / window.innerHeight - 0.5) * 10;
+                setMousePos({ x, y });
+            });
+        };
+
         window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
+        window.addEventListener("mousemove", handleMouseMove);
+        return () => {
+            window.removeEventListener("scroll", handleScroll);
+            window.removeEventListener("mousemove", handleMouseMove);
+        };
     }, []);
 
     const content = {
@@ -77,23 +91,28 @@ export function Hero() {
                         "max-lg:text-center max-lg:items-center"
                     )}>
 
-                        {/* Headline - Explicitly sharp rendering */}
-                        <h1 className="font-heading font-bold text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] xl:text-[6.5rem] leading-[0.95] tracking-tight text-white mb-8 uppercase animate-hero-up antialiased"
+                        {/* Headline - Explicitly sharp rendering with Depth */}
+                        <h1 className="font-heading font-bold text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] xl:text-[6.5rem] leading-[0.95] tracking-tight mb-8 uppercase antialiased"
                             style={{
-                                animationDelay: '100ms',
                                 textRendering: 'geometricPrecision',
                                 WebkitFontSmoothing: 'antialiased',
-                                transform: 'translateZ(0)', // Force GPU layering for sharpness
-                                backfaceVisibility: 'hidden'
+                                transform: 'translateZ(0)',
                             }}>
-                            <span className="block">{content.titleLine1}</span>
-                            <span className="block text-white">
+                            {/* Line 1 */}
+                            <span className="block animate-hero-up opacity-0 text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-200 drop-shadow-2xl"
+                                style={{ animationDelay: '100ms', filter: 'drop-shadow(0 8px 24px rgba(0,0,0,0.35))' }}>
+                                {content.titleLine1}
+                            </span>
+
+                            {/* Line 2 */}
+                            <span className="block animate-hero-up opacity-0 text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-200 drop-shadow-2xl"
+                                style={{ animationDelay: '220ms', filter: 'drop-shadow(0 8px 24px rgba(0,0,0,0.35))' }}>
                                 {content.titleLine2}
                             </span>
                         </h1>
 
                         {/* Subheadline */}
-                        <p className="font-body text-lg sm:text-xl lg:text-2xl text-white/70 max-w-2xl mb-12 leading-relaxed animate-hero-fade"
+                        <p className="font-body text-lg sm:text-xl lg:text-2xl text-white/70 max-w-3xl mb-12 leading-relaxed animate-hero-fade"
                             style={{ animationDelay: '300ms' }}>
                             {content.subtitle}
                         </p>
@@ -102,7 +121,7 @@ export function Hero() {
                         <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 animate-hero-scale"
                             style={{ animationDelay: '500ms' }}>
                             <Link to="/contact">
-                                <button className="group min-w-[200px] h-14 px-8 border border-white/20 bg-white/5 backdrop-blur-sm text-white font-medium hover:bg-white hover:text-[#0B0F14] hover:border-white transition-all duration-300 flex items-center justify-center rounded-sm">
+                                <button className="group min-w-[200px] h-14 px-8 border border-white/20 bg-white/5 backdrop-blur-sm text-white font-medium hover:bg-white hover:text-[#0B0F14] hover:border-white hover:-translate-y-[1px] transition-all duration-300 flex items-center justify-center rounded-sm">
                                     <span>{content.ctaPrimary}</span>
                                     <ArrowRight className={cn("w-5 h-5 transition-transform duration-300",
                                         isRTL ? "mr-2 group-hover:-translate-x-1 rotate-180" : "ml-2 group-hover:translate-x-1"
@@ -111,7 +130,7 @@ export function Hero() {
                             </Link>
 
                             <Link to="/services">
-                                <button className="min-w-[200px] h-14 px-8 text-white/60 hover:text-white hover:bg-white/5 transition-all duration-300 font-medium rounded-sm">
+                                <button className="min-w-[200px] h-14 px-8 text-white/60 hover:text-white hover:bg-white/5 hover:-translate-y-[1px] transition-all duration-300 font-medium rounded-sm">
                                     {content.ctaSecondary}
                                 </button>
                             </Link>
@@ -127,9 +146,8 @@ export function Hero() {
                 </div>
 
                 {/* KPI Strip - Anchored at Bottom of Hero Content */}
-                <div className="animate-slide-up opacity-0"
-                    style={{ animationFillMode: 'forwards', animationDelay: '800ms' }}>
-                    <HeroKPI />
+                <div className="relative z-20 mt-12 lg:mt-0">
+                    <HeroKPI startDelay={800} />
                 </div>
 
             </div>

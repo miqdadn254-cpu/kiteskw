@@ -39,17 +39,25 @@ const kpiData: KPI[] = [
     },
 ];
 
-export function HeroKPI() {
+interface HeroKPIProps {
+    startDelay?: number;
+}
+
+export function HeroKPI({ startDelay = 0 }: HeroKPIProps) {
     const { language } = useLanguage();
     const [isVisible, setIsVisible] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
+    const timerRef = useRef<NodeJS.Timeout>();
 
     useEffect(() => {
         const observer = new IntersectionObserver(
             ([entry]) => {
                 if (entry.isIntersecting) {
-                    setIsVisible(true);
-                    observer.disconnect();
+                    // Add custom delay before showing
+                    timerRef.current = setTimeout(() => {
+                        setIsVisible(true);
+                        observer.disconnect();
+                    }, startDelay);
                 }
             },
             { threshold: 0.1 }
@@ -59,24 +67,37 @@ export function HeroKPI() {
             observer.observe(containerRef.current);
         }
 
-        return () => observer.disconnect();
-    }, []);
+        return () => {
+            observer.disconnect();
+            clearTimeout(timerRef.current);
+        };
+    }, [startDelay]);
 
     return (
         <div
             ref={containerRef}
             className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 lg:mt-24 pointer-events-auto"
         >
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 p-6 sm:p-8 hover:bg-white/10 transition-colors duration-500">
-                {kpiData.map((item, index) => (
-                    <KPICard
-                        key={item.id}
-                        item={item}
-                        isVisible={isVisible}
-                        language={language}
-                        delay={index * 150}
-                    />
-                ))}
+            <div
+                ref={containerRef}
+                className={cn(
+                    "w-full rounded-lg bg-white/3 backdrop-blur-md border border-white/5 p-6 md:p-8 overflow-hidden relative",
+                    "before:absolute before:inset-0 before:-translate-x-full before:bg-gradient-to-r before:from-transparent before:via-white/5 before:to-transparent before:z-10",
+                    isVisible ? "opacity-100 translate-y-0 before:animate-[shimmer_2s_ease-in-out_forwards]" : "opacity-0 translate-y-4"
+                )}
+                style={{ transition: 'opacity 1s ease-out, transform 1s ease-out', transitionDelay: '0ms' }}
+            >
+                <div className="grid grid-cols-2 lg:flex lg:justify-between gap-6 lg:gap-12 relative z-20">
+                    {kpiData.map((stat, index) => (
+                        <KPICard
+                            key={index}
+                            item={stat}
+                            isVisible={isVisible}
+                            language={language}
+                            delay={index * 150} // Internal stagger between items
+                        />
+                    ))}
+                </div>
             </div>
         </div>
     );
