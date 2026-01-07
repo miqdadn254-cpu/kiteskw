@@ -1,5 +1,6 @@
-import { useRef, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 // Import SVG assets
 import dassaultLogo from '@/assets/partners/dassault.svg';
@@ -14,11 +15,13 @@ import simaproLogo from '@/assets/partners/simapro.svg';
 import herowearLogo from '@/assets/partners/herowear.svg';
 import chaosLogo from '@/assets/partners/chaos.svg';
 import cypeLogo from '@/assets/partners/cype.svg';
+import ansysLogo from '@/assets/partners/ansys.svg';
 
 const partners = [
     { name: 'Dassault Systèmes', logo: dassaultLogo, id: 'dassault' },
     { name: 'SOLIDWORKS', logo: solidworksLogo, id: 'solidworks' },
     { name: 'SIMULIA', logo: simuliaLogo, id: 'simulia' },
+    { name: 'ANSYS', logo: ansysLogo, id: 'ansys' },
     { name: 'MSC Software', logo: mscLogo, id: 'msc' },
     { name: 'DriveWorks', logo: driveworksLogo, id: 'driveworks' },
     { name: 'SimLab Soft', logo: simlabLogo, id: 'simlab' },
@@ -31,60 +34,63 @@ const partners = [
 ];
 
 export function PartnerLogos() {
-    const containerRef = useRef<HTMLDivElement>(null);
-    const [isVisible, setIsVisible] = useState(false);
+    const { isRTL } = useLanguage();
+    const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => {
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                if (entry.isIntersecting) {
-                    setIsVisible(true);
-                    observer.disconnect();
-                }
-            },
-            { threshold: 0.1, rootMargin: "-50px" }
-        );
-
-        if (containerRef.current) {
-            observer.observe(containerRef.current);
-        }
-
-        return () => observer.disconnect();
+        setIsMounted(true);
     }, []);
+
+    // Triplicate partners to ensure seamless loop
+    const marqueePartners = [...partners, ...partners, ...partners];
 
     return (
         <div
-            ref={containerRef}
-            className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-x-8 gap-y-12 lg:gap-x-12 lg:gap-y-16 items-center justify-items-center mb-16 max-w-6xl mx-auto"
+            className="w-full relative overflow-hidden group select-none"
+            style={{
+                maskImage: 'linear-gradient(to right, transparent, black 80px, black calc(100% - 80px), transparent)',
+                WebkitMaskImage: 'linear-gradient(to right, transparent, black 80px, black calc(100% - 80px), transparent)'
+            }}
+            dir="ltr" // Force LTR for the scrolling container itself
         >
-            {partners.map((partner, index) => (
-                <div
-                    key={partner.id}
-                    className={cn(
-                        "w-full flex items-center justify-center p-4 transition-all duration-700 ease-out transform",
-                        isVisible
-                            ? "opacity-100 translate-y-0"
-                            : "opacity-0 translate-y-8"
-                    )}
-                    style={{ transitionDelay: `${index * 60}ms` }}
-                >
-                    <div className="group relative w-full h-12 flex items-center justify-center">
-                        {/* Logo Image */}
-                        <img
-                            src={partner.logo}
-                            alt={`${partner.name} logo`}
-                            className="max-w-[140px] max-h-full w-auto h-auto object-contain filter grayscale opacity-60 transition-all duration-300 ease-out group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-105"
-                        />
-
-                        {/* Optional Tooltip/Label on Hover */}
-                        <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-                            <span className="text-[10px] font-medium text-muted-foreground whitespace-nowrap uppercase tracking-wider">
-                                {partner.name}
-                            </span>
+            <div
+                className={cn(
+                    "flex items-center gap-16 sm:gap-20 lg:gap-24 py-8 w-max", // Increased spacing: gap-16 -> gap-24
+                    // Base animation
+                    "animate-marquee",
+                    // Pause on hover
+                    "group-hover:[animation-play-state:paused]",
+                    // Reduced motion
+                    "motion-reduce:animate-none motion-reduce:translate-x-0"
+                )}
+                style={{
+                    '--marquee-duration': '80s',
+                    animationDirection: isRTL ? 'reverse' : 'normal'
+                } as React.CSSProperties}
+            >
+                {marqueePartners.map((partner, index) => (
+                    <div
+                        key={`${partner.id}-${index}`}
+                        className="flex-shrink-0 flex items-center justify-center px-4 transition-all duration-300"
+                    >
+                        {/* Fixed height container: h-14 (mob) -> h-20 (tab) -> h-24 (desk) */}
+                        <div className="relative h-14 sm:h-20 lg:h-24 w-auto min-w-[120px] flex items-center justify-center">
+                            <img
+                                src={partner.logo}
+                                alt={`${partner.name} logo`}
+                                className={cn(
+                                    "h-full w-auto object-contain max-h-full transition-all duration-300 ease-in-out",
+                                    // Visual Normalization: increased max-width to allow larger logos to breathe
+                                    "max-w-[180px] sm:max-w-[200px] lg:max-w-[240px]",
+                                    // Interaction: grayscale -> color, opacity change, scale
+                                    "filter grayscale opacity-70",
+                                    "hover:grayscale-0 hover:opacity-100 hover:scale-105"
+                                )}
+                            />
                         </div>
                     </div>
-                </div>
-            ))}
+                ))}
+            </div>
         </div>
     );
 }

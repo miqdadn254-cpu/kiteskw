@@ -6,10 +6,10 @@ import { ScrollReveal, StaggerContainer, StaggerItem } from "@/components/ui/scr
 
 const content = {
   en: {
-    heading: "Trusted by world-leading technology partners.",
-    subtitle: "Collaborating with the most respected engineering software leaders worldwide.",
-    button: "Explore All Technology Partners",
-    trustStat: "Partnerships spanning simulation, PLM, sustainability, and analytics.",
+    heading: "Trusted by World-Leading Technology Partners",
+    subtitle: "Partnering with global leaders in simulation, sustainability, and analytics.",
+    button: "View All Partners",
+    trustStat: "",  // Removing as it's now covered by subtitle
   },
   ar: {
     heading: "شراكات مع مزودي التكنولوجيا الرائدين عالميًا.",
@@ -36,9 +36,9 @@ export function PartnersSection() {
 
   return (
     <section id="partners" className="py-24 lg:py-32 bg-background">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 mb-12">
         {/* Section Header */}
-        <ScrollReveal className="text-center mb-16">
+        <ScrollReveal className="text-center">
           <div className="accent-line mx-auto mb-8" />
           <h2 className="font-heading text-h2 sm:text-3xl lg:text-4xl font-semibold text-foreground max-w-2xl mx-auto mb-6">
             {t.heading}
@@ -47,19 +47,14 @@ export function PartnersSection() {
             {t.subtitle}
           </p>
         </ScrollReveal>
+      </div>
 
-        {/* Partners Logo Grid */}
-        <div className="mb-4">
-          <PartnerLogos />
-        </div>
+      {/* Partners Logo Marquee - Full Width */}
+      <div className="w-full mb-12">
+        <PartnerLogos />
+      </div>
 
-        {/* Trust Stat */}
-        <ScrollReveal delay={200} className="text-center mb-10">
-          <p className="text-sm font-medium text-muted-foreground/80">
-            {t.trustStat}
-          </p>
-        </ScrollReveal>
-
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* CTA Button */}
         <ScrollReveal delay={300} className="text-center">
           <Link to="/partners">

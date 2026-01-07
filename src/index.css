@@ -460,6 +460,38 @@
     @apply transition-transform duration-200;
   }
 
+  @keyframes drift-left {
+
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+
+    50% {
+      transform: translateX(-4px);
+    }
+  }
+
+  @keyframes drift-right {
+
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+
+    50% {
+      transform: translateX(4px);
+    }
+  }
+
+  .animate-drift-left {
+    animation: drift-left 12s ease-in-out infinite;
+  }
+
+  .animate-drift-right {
+    animation: drift-right 14s ease-in-out infinite;
+  }
+
   .hover-lift:hover {
     transform: translateY(-2px);
   }

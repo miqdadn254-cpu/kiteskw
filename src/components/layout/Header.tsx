@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -39,11 +39,19 @@ export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const { language, setLanguage } = useLanguage();
   const common = useContent<CommonContent>('common');
+  const location = useLocation();
+
+  // Check if we are on the homepage
+  const isHomePage = location.pathname === "/";
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 40);
     };
+
+    // Initial check
+    handleScroll();
+
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -59,12 +67,17 @@ export function Header() {
     };
   }, [isOpen]);
 
+  // Determine header appearance
+  // If NOT homepage, always use the "scrolled" (solid/visible) style
+  // If homepage, use scroll state to toggle between transparent and solid
+  const shouldShowSolidHeader = !isHomePage || isScrolled;
+
   return (
     <>
       <header
         className={cn(
           "fixed top-0 inset-x-0 z-50 transition-all duration-300 ease-in-out h-[var(--header-height)] flex items-center",
-          isScrolled
+          shouldShowSolidHeader
             ? "bg-[#0B0F14]/95 backdrop-blur-md shadow-md border-b border-white/10"
             : "bg-transparent backdrop-blur-sm border-b border-transparent"
         )}
@@ -90,9 +103,12 @@ export function Header() {
                   key={item.key}
                   to={item.href}
                   className={({ isActive }) => cn(
-                    "relative py-2 text-white/90 hover:text-white font-body text-lg font-medium transition-colors duration-200",
+                    "relative py-2 font-body text-lg font-medium transition-colors duration-200",
                     "after:absolute after:-bottom-1 after:left-0 after:right-0 after:h-[2px] after:bg-white after:origin-center after:transition-transform after:duration-300",
-                    isActive ? "after:scale-x-100 text-white font-semibold" : "after:scale-x-0 hover:after:scale-x-100"
+                    // Enhancing visibility logic for links based on header state
+                    shouldShowSolidHeader
+                      ? (isActive ? "text-white after:scale-x-100 font-semibold" : "text-white/90 hover:text-white after:scale-x-0 hover:after:scale-x-100")
+                      : (isActive ? "text-white after:scale-x-100 font-semibold" : "text-white/90 hover:text-white after:scale-x-0 hover:after:scale-x-100")
                   )}
                 >
                   {common.nav[item.key as keyof typeof common.nav]}
