@@ -134,24 +134,25 @@ export default function Expertise() {
       <div className="min-h-screen bg-white">
         <Header />
 
-        {/* Page Hero - Clean Enterprise Style */}
-        <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-24 overflow-hidden" id="main-content">
-          {/* Subtle Brand Wash */}
-          <div className="absolute inset-0 z-0 bg-gradient-to-b from-slate-50 to-white" />
-          <div className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-50/40 via-transparent to-transparent opacity-60" />
+        {/* Page Hero - Unified Dark Enterprise Style */}
+        <section className="relative pt-24 pb-12 sm:pt-32 sm:pb-16 lg:pt-40 lg:pb-24 overflow-hidden bg-[#0B0F14]" id="main-content">
+          {/* Deep Navy Gradient */}
+          <div className="absolute inset-0 z-0 bg-gradient-to-b from-[#0B0F14] to-[#101826]" />
+          {/* Subtle Noise */}
+          <div className="absolute inset-0 opacity-[0.03] bg-[url('/noise.png')] mix-blend-overlay pointer-events-none z-0" />
 
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="max-w-4xl mx-auto text-center">
               <ScrollReveal>
-                <div className="inline-block mb-8">
-                  <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-blue-700 bg-blue-50/80 px-4 py-1.5 rounded-full border border-blue-100/50 backdrop-blur-sm">
+                <div className="inline-block mb-4 sm:mb-6 lg:mb-8">
+                  <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.15em] sm:tracking-[0.2em] text-slate-300 bg-white/5 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full border border-white/10 backdrop-blur-sm">
                     {t.hero.eyebrow}
                   </span>
                 </div>
-                <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 mb-8 leading-[1.05] tracking-tight">
+                <h1 className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 sm:mb-6 lg:mb-8 leading-[1.05] tracking-tight">
                   {t.hero.title}
                 </h1>
-                <p className="font-body text-lg sm:text-xl text-slate-600 leading-relaxed max-w-2xl mx-auto font-light">
+                <p className="font-body text-base sm:text-lg lg:text-xl text-slate-400/90 leading-relaxed max-w-2xl mx-auto font-light px-2 sm:px-0">
                   {t.hero.intro}
                 </p>
               </ScrollReveal>
@@ -160,7 +161,7 @@ export default function Expertise() {
         </section>
 
         {/* Core Expertise Areas */}
-        <section className="py-20 bg-white relative">
+        <section className="py-12 sm:py-16 lg:py-20 bg-white relative">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
 
             {/* Section Header */}

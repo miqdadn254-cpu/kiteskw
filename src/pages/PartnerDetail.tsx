@@ -96,26 +96,26 @@ export default function PartnerDetail() {
         <Header />
 
         {/* Partner Hero */}
-        <section className="pt-32 pb-16 lg:pt-40 lg:pb-24 bg-secondary/30">
+        <section className="pt-24 pb-10 sm:pt-32 sm:pb-16 lg:pt-40 lg:pb-24 bg-secondary/30">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             {/* Back Link */}
             <Link
               to="/partners"
-              className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground font-body text-sm mb-8 transition-colors"
+              className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground font-body text-xs sm:text-sm mb-6 sm:mb-8 transition-colors"
             >
-              <ArrowLeft size={16} strokeWidth={1.5} className="rtl:rotate-180" />
+              <ArrowLeft size={14} strokeWidth={1.5} className="rtl:rotate-180" />
               {allContent.pageLabels.backToPartners}
             </Link>
 
             <div className="max-w-4xl">
               {/* Partner Logo Placeholder */}
-              <div className="w-28 h-28 lg:w-36 lg:h-36 border border-border bg-background flex items-center justify-center mb-8">
-                <span className="font-heading text-4xl lg:text-5xl font-bold text-muted-foreground/50">
+              <div className="w-20 h-20 sm:w-28 sm:h-28 lg:w-36 lg:h-36 border border-border bg-background flex items-center justify-center mb-6 sm:mb-8">
+                <span className="font-heading text-2xl sm:text-4xl lg:text-5xl font-bold text-muted-foreground/50">
                   {partner.abbr}
                 </span>
               </div>
 
-              <h1 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground tracking-tight">
+              <h1 className="font-heading text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-foreground tracking-tight">
                 {partnerContent.name}
               </h1>
             </div>
@@ -123,13 +123,13 @@ export default function PartnerDetail() {
         </section>
 
         {/* About the Partner */}
-        <section className="py-16 lg:py-24">
+        <section className="py-10 sm:py-12 lg:py-24">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-3xl">
-              <h2 className="font-heading text-2xl lg:text-3xl font-semibold text-foreground mb-6 tracking-tight">
+              <h2 className="font-heading text-xl sm:text-2xl lg:text-3xl font-semibold text-foreground mb-4 sm:mb-6 tracking-tight">
                 {allContent.pageLabels.aboutTitle} {partnerContent.name}
               </h2>
-              <p className="font-body text-lg text-muted-foreground leading-relaxed">
+              <p className="font-body text-base sm:text-lg text-muted-foreground leading-relaxed">
                 {partnerContent.about}
               </p>
             </div>
@@ -137,17 +137,17 @@ export default function PartnerDetail() {
         </section>
 
         {/* Solutions & Applications */}
-        <section className="py-16 lg:py-24 bg-secondary/30">
+        <section className="py-10 sm:py-12 lg:py-24 bg-secondary/30">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-3xl">
-              <h2 className="font-heading text-2xl lg:text-3xl font-semibold text-foreground mb-8 tracking-tight">
+              <h2 className="font-heading text-xl sm:text-2xl lg:text-3xl font-semibold text-foreground mb-6 sm:mb-8 tracking-tight">
                 {allContent.pageLabels.solutionsTitle}
               </h2>
-              <ul className="space-y-4">
+              <ul className="space-y-3 sm:space-y-4">
                 {partnerContent.solutions.map((solution, index) => (
                   <li
                     key={index}
-                    className="flex items-start gap-4 font-body text-lg text-muted-foreground"
+                    className="flex items-start gap-3 sm:gap-4 font-body text-base sm:text-lg text-muted-foreground"
                   >
                     <Check className="w-5 h-5 text-foreground shrink-0 mt-0.5" strokeWidth={1.5} />
                     <span>{solution}</span>

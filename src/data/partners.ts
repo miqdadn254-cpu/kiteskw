@@ -1,35 +1,45 @@
-/**
- * Partner data organized by category
- * This file contains the structural data for all partners.
- * Display names are language-specific and come from content files.
- */
+import dassaultLogo from '@/assets/partners/dassault.svg';
+import solidworksLogo from '@/assets/partners/solidworks.svg';
+import simuliaLogo from '@/assets/partners/simulia.svg';
+import mscLogo from '@/assets/partners/msc.svg';
+import cypeLogo from '@/assets/partners/cype.svg';
+import simlabLogo from '@/assets/partners/simlab.svg';
+import driveworksLogo from '@/assets/partners/driveworks.svg';
+import chaosLogo from '@/assets/partners/chaos.svg';
+import simaproLogo from '@/assets/partners/simapro.svg';
+import maxqdaLogo from '@/assets/partners/maxqda.svg';
+import crealityLogo from '@/assets/partners/creality.svg';
+import herowearLogo from '@/assets/partners/herowear.svg';
 
 export interface Partner {
     id: string;
     name: string;
     abbr: string;
-    category: 'engineering' | 'sustainability' | 'research';
+    category: 'engineering' | 'sustainability' | 'research' | 'manufacturing';
+    desc?: string;
+    logo?: string;
 }
 
 export const partners: Partner[] = [
     // Engineering & Simulation Software
-    { id: "siemens", name: "Siemens", abbr: "Si", category: "engineering" },
-    { id: "autodesk", name: "Autodesk", abbr: "Ad", category: "engineering" },
-    { id: "ansys", name: "ANSYS", abbr: "An", category: "engineering" },
-    { id: "dassault", name: "Dassault Systèmes", abbr: "DS", category: "engineering" },
-    { id: "ptc", name: "PTC", abbr: "PTC", category: "engineering" },
-    { id: "hexagon", name: "Hexagon", abbr: "Hx", category: "engineering" },
+    { id: "dassault", name: "Dassault Systèmes", abbr: "DS", category: "engineering", desc: "World leader in 3D design & engineering software.", logo: dassaultLogo },
+    { id: "solidworks", name: "SOLIDWORKS", abbr: "SW", category: "engineering", desc: "Premier 3D CAD design and engineering capabilities.", logo: solidworksLogo },
+    { id: "simulia", name: "SIMULIA", abbr: "SM", category: "engineering", desc: "Realistic simulation applications (Abaqus, fe-safe).", logo: simuliaLogo },
+    { id: "msc", name: "MSC Software", abbr: "MSC", category: "engineering", desc: "Leading multi-physics and CAE simulation solutions.", logo: mscLogo },
+    { id: "cype", name: "CYPE", abbr: "CY", category: "engineering", desc: "Software for architecture, engineering and construction.", logo: cypeLogo },
+    { id: "simlab", name: "SimLab Soft", abbr: "SL", category: "engineering", desc: "3D visualization and VR collaboration tools.", logo: simlabLogo },
+    { id: "driveworks", name: "DriveWorks", abbr: "DW", category: "engineering", desc: "Design automation and CPQ for SOLIDWORKS.", logo: driveworksLogo },
+    { id: "chaos", name: "CHAOS", abbr: "CH", category: "engineering", desc: "High-quality rendering and visualization technology.", logo: chaosLogo },
 
     // Sustainability & Environmental Solutions
-    { id: "schneider", name: "Schneider Electric", abbr: "SE", category: "sustainability" },
-    { id: "envizi", name: "Envizi", abbr: "Ev", category: "sustainability" },
-    { id: "sphera", name: "Sphera", abbr: "Sp", category: "sustainability" },
+    { id: "simapro", name: "SimaPro", abbr: "SP", category: "sustainability", desc: "Leading LCA software for sustainability analysis.", logo: simaproLogo },
 
     // Research & Analytics Software
-    { id: "matlab", name: "MathWorks", abbr: "MW", category: "research" },
-    { id: "tableau", name: "Tableau", abbr: "Tb", category: "research" },
-    { id: "esri", name: "Esri", abbr: "Es", category: "research" },
-    { id: "alteryx", name: "Alteryx", abbr: "Ax", category: "research" },
+    { id: "maxqda", name: "MAXQDA", abbr: "MQ", category: "research", desc: "Advanced qualitative and mixed methods data analysis.", logo: maxqdaLogo },
+
+    // Advanced Manufacturing & Innovation
+    { id: "creality", name: "CREALITY", abbr: "CR", category: "manufacturing", desc: "Professional 3D printing and additive manufacturing.", logo: crealityLogo },
+    { id: "herowear", name: "HEROWEAR", abbr: "HW", category: "manufacturing", desc: "Exosuits for workforce safety and fatigue reduction.", logo: herowearLogo },
 ];
 
 /**

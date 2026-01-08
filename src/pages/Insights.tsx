@@ -36,11 +36,10 @@ export default function Insights() {
         <section className="page-hero">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="max-w-3xl mx-auto text-center">
-              <div className="accent-line-light mx-auto mb-10" />
-              <h1 className="font-heading text-h1 sm:text-4xl lg:text-5xl font-semibold text-primary-foreground mb-6">
+              <h1 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-semibold text-primary-foreground mb-4 sm:mb-6 tracking-tight">
                 {t.pageTitle}
               </h1>
-              <p className="font-body text-body-lg text-primary-foreground/60 leading-relaxed">
+              <p className="font-body text-base sm:text-lg text-primary-foreground/70 leading-relaxed px-2 sm:px-0">
                 {t.intro}
               </p>
             </div>
@@ -48,12 +47,12 @@ export default function Insights() {
         </section>
 
         {/* Category Filters */}
-        <section className="py-6 bg-background border-b border-border sticky top-[72px] z-40">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-wrap gap-2">
+        <section className="py-4 sm:py-6 bg-background border-b border-border sticky top-[76px] z-40 backdrop-blur-md bg-background/95">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 overflow-x-auto no-scrollbar">
+            <div className="flex gap-2 min-w-max">
               <button
                 onClick={() => setActiveCategory(null)}
-                className={activeCategory === null ? "badge-category-active" : "badge-category hover:border-foreground/30 transition-colors"}
+                className={activeCategory === null ? "badge-category-active whitespace-nowrap" : "badge-category hover:border-foreground/30 transition-colors whitespace-nowrap"}
               >
                 {t.allCategory}
               </button>
@@ -61,7 +60,7 @@ export default function Insights() {
                 <button
                   key={index}
                   onClick={() => setActiveCategory(index)}
-                  className={activeCategory === index ? "badge-category-active" : "badge-category hover:border-foreground/30 transition-colors"}
+                  className={activeCategory === index ? "badge-category-active whitespace-nowrap" : "badge-category hover:border-foreground/30 transition-colors whitespace-nowrap"}
                 >
                   {category}
                 </button>
@@ -71,10 +70,10 @@ export default function Insights() {
         </section>
 
         {/* Articles Grid */}
-        <section className="py-20 lg:py-28 bg-background">
+        <section className="py-12 sm:py-16 lg:py-28 bg-background">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             {filteredArticles.length > 0 ? (
-              <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+              <div className="grid gap-6 sm:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
                 {filteredArticles.map((article) => (
                   <article
                     key={article.id}

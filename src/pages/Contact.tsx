@@ -8,9 +8,17 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Mail, Phone, MapPin, ArrowRight, CheckCircle } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Mail, Phone, MapPin, ArrowRight, CheckCircle, Send, Clock, Building2 } from "lucide-react";
 import { z } from "zod";
 import { useToast } from "@/hooks/use-toast";
+import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
 interface ContactContent {
   pageTitle: string;
@@ -21,18 +29,24 @@ interface ContactContent {
       email: string;
       phone: string;
       company: string;
+      subject: string;
       message: string;
+    };
+    placeholders: {
+      subject: string;
     };
     submit: string;
     sending: string;
     success: string;
     successDesc: string;
+    reassurance: string;
   };
   validation: {
     nameRequired: string;
     nameMax: string;
     emailRequired: string;
     emailInvalid: string;
+    phoneRequired: string;
     phoneInvalid: string;
     companyMax: string;
     messageRequired: string;
@@ -59,6 +73,7 @@ export default function Contact() {
     email: "",
     phone: "",
     company: "",
+    subject: "",
     message: "",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -79,10 +94,10 @@ export default function Contact() {
     phone: z
       .string()
       .trim()
-      .regex(/^[\d\s+()-]*$/, t.validation.phoneInvalid)
-      .optional()
-      .or(z.literal("")),
+      .min(1, t.validation.phoneRequired)
+      .regex(/^[\d\s+()-]*$/, t.validation.phoneInvalid),
     company: z.string().trim().max(100, t.validation.companyMax).optional(),
+    subject: z.string().optional(),
     message: z
       .string()
       .trim()
@@ -98,6 +113,10 @@ export default function Contact() {
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: "" }));
     }
+  };
+
+  const handleSelectChange = (value: string) => {
+    setFormData(prev => ({ ...prev, subject: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -124,7 +143,7 @@ export default function Contact() {
 
     setIsSubmitting(false);
     setIsSuccess(true);
-    setFormData({ name: "", email: "", phone: "", company: "", message: "" });
+    setFormData({ name: "", email: "", phone: "", company: "", subject: "", message: "" });
 
     toast({
       title: t.form.success,
@@ -135,207 +154,267 @@ export default function Contact() {
   return (
     <>
       <SEO page="contact" />
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-background text-foreground">
         <Header />
 
         {/* Hero Section */}
-        <section className="page-hero">
+        <section className="pt-24 pb-12 sm:pt-32 sm:pb-16 lg:pt-48 lg:pb-32 bg-primary relative overflow-hidden">
+          {/* Noise Texture */}
+          <div className="absolute inset-0 opacity-[0.04] bg-[url('/noise.png')] mix-blend-overlay pointer-events-none" />
+
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div className="max-w-3xl mx-auto text-center">
-              <div className="accent-line-light mx-auto mb-10" />
-              <h1 className="font-heading text-h1 sm:text-4xl lg:text-5xl font-semibold text-primary-foreground mb-6">
+            <ScrollReveal className="max-w-3xl mx-auto text-center">
+              <h1 className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-primary-foreground mb-4 sm:mb-6 tracking-tight leading-tight">
                 {t.pageTitle}
               </h1>
-              <p className="font-body text-body-lg text-primary-foreground/60 leading-relaxed">
+              <p className="font-body text-base sm:text-lg lg:text-xl text-primary-foreground/80 font-light leading-relaxed max-w-2xl mx-auto px-2 sm:px-0">
                 {t.intro}
               </p>
-            </div>
+            </ScrollReveal>
           </div>
         </section>
 
         {/* Contact Form & Details */}
-        <section className="py-20 lg:py-28 bg-background">
+        <section className="py-12 sm:py-16 lg:py-28 bg-background">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid gap-16 lg:grid-cols-3">
+            <div className="grid gap-12 lg:gap-16 lg:grid-cols-3 items-start">
+
               {/* Contact Form */}
               <div className="lg:col-span-2">
-                {isSuccess ? (
-                  <div className="border border-border p-10 text-center">
-                    <div className="w-14 h-14 border border-foreground/20 flex items-center justify-center mx-auto mb-6">
-                      <CheckCircle className="w-6 h-6 text-foreground" strokeWidth={1.5} />
-                    </div>
-                    <h3 className="font-heading text-h3 font-semibold text-foreground mb-3">
-                      {t.form.success}
-                    </h3>
-                    <p className="text-muted-foreground mb-8">{t.form.successDesc}</p>
-                    <Button
-                      variant="outline"
-                      onClick={() => setIsSuccess(false)}
-                    >
-                      {language === "en" ? "Send Another Message" : "إرسال رسالة أخرى"}
-                    </Button>
+                <ScrollReveal>
+                  <div className="bg-card border border-border/50 rounded-2xl p-6 sm:p-10 shadow-sm">
+                    {isSuccess ? (
+                      <div className="text-center py-16">
+                        <div className="w-20 h-20 bg-green-100 border border-green-200 rounded-full flex items-center justify-center mx-auto mb-6">
+                          <CheckCircle className="w-10 h-10 text-green-600" strokeWidth={2} />
+                        </div>
+                        <h3 className="font-heading text-2xl font-bold text-foreground mb-3">
+                          {t.form.success}
+                        </h3>
+                        <p className="text-muted-foreground mb-8 text-lg max-w-md mx-auto">{t.form.successDesc}</p>
+                        <Button
+                          variant="outline"
+                          onClick={() => setIsSuccess(false)}
+                          className="min-w-[200px]"
+                        >
+                          {language === "en" ? "Send Another Message" : "إرسال رسالة أخرى"}
+                        </Button>
+                      </div>
+                    ) : (
+                      <form onSubmit={handleSubmit} className="space-y-8">
+                        <div className="grid gap-6 sm:grid-cols-2">
+                          {/* Name */}
+                          <div className="space-y-2">
+                            <Label htmlFor="name" className="text-sm font-medium text-foreground/80">{t.form.labels.name} <span className="text-blue-500">*</span></Label>
+                            <Input
+                              id="name"
+                              name="name"
+                              value={formData.name}
+                              onChange={handleChange}
+                              className={`h-12 bg-background focus:ring-2 focus:ring-blue-500/20 transition-all ${errors.name ? "border-destructive focus:ring-destructive/20" : "border-input"}`}
+                              maxLength={100}
+                              autoComplete="name"
+                            />
+                            {errors.name && (
+                              <p className="text-destructive text-xs font-medium flex items-center gap-1 mt-1">
+                                <span className="inline-block w-1 h-1 rounded-full bg-destructive" />
+                                {errors.name}
+                              </p>
+                            )}
+                          </div>
+
+                          {/* Email */}
+                          <div className="space-y-2">
+                            <Label htmlFor="email" className="text-sm font-medium text-foreground/80">{t.form.labels.email} <span className="text-blue-500">*</span></Label>
+                            <Input
+                              id="email"
+                              name="email"
+                              type="email"
+                              value={formData.email}
+                              onChange={handleChange}
+                              className={`h-12 bg-background focus:ring-2 focus:ring-blue-500/20 transition-all ${errors.email ? "border-destructive focus:ring-destructive/20" : "border-input"}`}
+                              maxLength={255}
+                              autoComplete="email"
+                            />
+                            {errors.email && (
+                              <p className="text-destructive text-xs font-medium flex items-center gap-1 mt-1">
+                                <span className="inline-block w-1 h-1 rounded-full bg-destructive" />
+                                {errors.email}
+                              </p>
+                            )}
+                          </div>
+
+                          {/* Phone */}
+                          <div className="space-y-2">
+                            <Label htmlFor="phone" className="text-sm font-medium text-foreground/80">{t.form.labels.phone} <span className="text-blue-500">*</span></Label>
+                            <Input
+                              id="phone"
+                              name="phone"
+                              type="tel"
+                              value={formData.phone}
+                              onChange={handleChange}
+                              className={`h-12 bg-background focus:ring-2 focus:ring-blue-500/20 transition-all ${errors.phone ? "border-destructive focus:ring-destructive/20" : "border-input"}`}
+                              maxLength={20}
+                              autoComplete="tel"
+                            />
+                            {errors.phone && (
+                              <p className="text-destructive text-xs font-medium flex items-center gap-1 mt-1">
+                                <span className="inline-block w-1 h-1 rounded-full bg-destructive" />
+                                {errors.phone}
+                              </p>
+                            )}
+                          </div>
+
+                          {/* Subject (Inquiry Type) */}
+                          <div className="space-y-2">
+                            <Label htmlFor="subject" className="text-sm font-medium text-foreground/80">Inquiry Type</Label>
+                            <Select onValueChange={handleSelectChange}>
+                              <SelectTrigger className="h-12 bg-background focus:ring-2 focus:ring-blue-500/20 border-input">
+                                <SelectValue placeholder={language === 'en' ? "Select a topic..." : "اختر موضوعاً..."} />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="consultation">{language === 'en' ? "Consultation" : "استشارة"}</SelectItem>
+                                <SelectItem value="training">{language === 'en' ? "Professional Training" : "تدريب مهني"}</SelectItem>
+                                <SelectItem value="software">{language === 'en' ? "Software Licensing" : "تراخيص البرمجيات"}</SelectItem>
+                                <SelectItem value="general">{language === 'en' ? "General Inquiry" : "استفسار عام"}</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        </div>
+
+                        {/* Company (Full Width) */}
+                        <div className="space-y-2">
+                          <Label htmlFor="company" className="text-sm font-medium text-foreground/80">{t.form.labels.company}</Label>
+                          <Input
+                            id="company"
+                            name="company"
+                            value={formData.company}
+                            onChange={handleChange}
+                            className={`h-12 bg-background focus:ring-2 focus:ring-blue-500/20 transition-all ${errors.company ? "border-destructive focus:ring-destructive/20" : "border-input"}`}
+                            maxLength={100}
+                            autoComplete="organization"
+                          />
+                          {errors.company && (
+                            <p className="text-destructive text-xs font-medium flex items-center gap-1 mt-1">
+                              <span className="inline-block w-1 h-1 rounded-full bg-destructive" />
+                              {errors.company}
+                            </p>
+                          )}
+                        </div>
+
+                        {/* Message */}
+                        <div className="space-y-2">
+                          <Label htmlFor="message" className="text-sm font-medium text-foreground/80">{t.form.labels.message} <span className="text-blue-500">*</span></Label>
+                          <Textarea
+                            id="message"
+                            name="message"
+                            value={formData.message}
+                            onChange={handleChange}
+                            className={`min-h-[160px] resize-y bg-background focus:ring-2 focus:ring-blue-500/20 transition-all ${errors.message ? "border-destructive focus:ring-destructive/20" : "border-input"}`}
+                            maxLength={1000}
+                          />
+                          {errors.message && (
+                            <p className="text-destructive text-xs font-medium flex items-center gap-1 mt-1">
+                              <span className="inline-block w-1 h-1 rounded-full bg-destructive" />
+                              {errors.message}
+                            </p>
+                          )}
+                        </div>
+
+                        <div className="flex flex-col sm:flex-row items-center gap-6 pt-4">
+                          <Button
+                            type="submit"
+                            variant="default"
+                            size="lg"
+                            disabled={isSubmitting}
+                            className="w-full sm:w-auto min-w-[180px] h-14 text-base shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 transition-all"
+                          >
+                            {isSubmitting ? (
+                              <span className="flex items-center gap-2">
+                                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                {t.form.sending}
+                              </span>
+                            ) : (
+                              <span className="flex items-center gap-2">
+                                {t.form.submit}
+                                <Send size={18} className="rtl:-scale-x-100" />
+                              </span>
+                            )}
+                          </Button>
+
+                          <p className="text-xs text-muted-foreground flex items-center gap-1.5 opacity-80">
+                            <Clock size={14} />
+                            {language === 'en' ? "We typically reply within 24 hours." : "نرد عادةً خلال 24 ساعة."}
+                          </p>
+                        </div>
+                      </form>
+                    )}
                   </div>
-                ) : (
-                  <form onSubmit={handleSubmit} className="space-y-8">
-                    <div className="grid gap-8 sm:grid-cols-2">
-                      {/* Name */}
-                      <div className="space-y-2">
-                        <Label htmlFor="name" className="text-body-sm font-medium">{t.form.labels.name} *</Label>
-                        <Input
-                          id="name"
-                          name="name"
-                          value={formData.name}
-                          onChange={handleChange}
-                          className={`h-12 ${errors.name ? "border-destructive" : ""}`}
-                          maxLength={100}
-                        />
-                        {errors.name && (
-                          <p className="text-destructive text-body-sm">{errors.name}</p>
-                        )}
-                      </div>
-
-                      {/* Email */}
-                      <div className="space-y-2">
-                        <Label htmlFor="email" className="text-body-sm font-medium">{t.form.labels.email} *</Label>
-                        <Input
-                          id="email"
-                          name="email"
-                          type="email"
-                          value={formData.email}
-                          onChange={handleChange}
-                          className={`h-12 ${errors.email ? "border-destructive" : ""}`}
-                          maxLength={255}
-                        />
-                        {errors.email && (
-                          <p className="text-destructive text-body-sm">{errors.email}</p>
-                        )}
-                      </div>
-
-                      {/* Phone */}
-                      <div className="space-y-2">
-                        <Label htmlFor="phone" className="text-body-sm font-medium">{t.form.labels.phone}</Label>
-                        <Input
-                          id="phone"
-                          name="phone"
-                          type="tel"
-                          value={formData.phone}
-                          onChange={handleChange}
-                          className={`h-12 ${errors.phone ? "border-destructive" : ""}`}
-                          maxLength={20}
-                        />
-                        {errors.phone && (
-                          <p className="text-destructive text-body-sm">{errors.phone}</p>
-                        )}
-                      </div>
-
-                      {/* Company */}
-                      <div className="space-y-2">
-                        <Label htmlFor="company" className="text-body-sm font-medium">{t.form.labels.company}</Label>
-                        <Input
-                          id="company"
-                          name="company"
-                          value={formData.company}
-                          onChange={handleChange}
-                          className={`h-12 ${errors.company ? "border-destructive" : ""}`}
-                          maxLength={100}
-                        />
-                        {errors.company && (
-                          <p className="text-destructive text-body-sm">{errors.company}</p>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Message */}
-                    <div className="space-y-2">
-                      <Label htmlFor="message" className="text-body-sm font-medium">{t.form.labels.message} *</Label>
-                      <Textarea
-                        id="message"
-                        name="message"
-                        value={formData.message}
-                        onChange={handleChange}
-                        className={`min-h-[180px] ${errors.message ? "border-destructive" : ""}`}
-                        maxLength={1000}
-                      />
-                      {errors.message && (
-                        <p className="text-destructive text-body-sm">{errors.message}</p>
-                      )}
-                    </div>
-
-                    <Button
-                      type="submit"
-                      variant="default"
-                      size="lg"
-                      disabled={isSubmitting}
-                      className="min-w-[180px]"
-                    >
-                      {isSubmitting ? t.form.sending : t.form.submit}
-                      <ArrowRight size={16} className="ms-2 rtl:-scale-x-100" />
-                    </Button>
-                  </form>
-                )}
+                </ScrollReveal>
               </div>
 
               {/* Contact Details */}
               <div className="lg:col-span-1">
-                <div className="border border-border p-8 sticky top-24">
-                  <h3 className="font-heading text-h4 font-semibold text-foreground mb-8">
-                    {t.contactDetails.heading}
-                  </h3>
+                <ScrollReveal delay={200}>
+                  <div className="bg-card border border-border/50 rounded-2xl p-8 sticky top-32 shadow-sm hover:shadow-md transition-shadow duration-300">
+                    <h3 className="font-heading text-xl font-bold text-foreground mb-8 pb-4 border-b border-border/40">
+                      {t.contactDetails.heading}
+                    </h3>
 
-                  <div className="space-y-8">
-                    {/* Email */}
-                    <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 border border-border flex items-center justify-center flex-shrink-0">
-                        <Mail className="w-4 h-4 text-foreground/70" strokeWidth={1.5} />
-                      </div>
-                      <div>
-                        <p className="text-body-sm text-muted-foreground mb-1">
-                          {t.contactDetails.email}
-                        </p>
-                        <a
-                          href={`mailto:${t.contactDetails.emailValue}`}
-                          className="text-foreground hover:text-accent transition-colors"
-                        >
-                          {t.contactDetails.emailValue}
-                        </a>
-                      </div>
-                    </div>
+                    <div className="space-y-8">
+                      {/* Email */}
+                      <a
+                        href={`mailto:${t.contactDetails.emailValue}`}
+                        className="group flex items-start gap-4 p-2 -mx-2 rounded-lg hover:bg-secondary/50 transition-colors"
+                      >
+                        <div className="w-12 h-12 bg-blue-500/10 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-blue-500 group-hover:text-white text-blue-600 transition-colors duration-300">
+                          <Mail className="w-5 h-5" strokeWidth={2} />
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium text-muted-foreground mb-1">
+                            {t.contactDetails.email}
+                          </p>
+                          <span className="text-foreground font-semibold group-hover:text-blue-600 transition-colors">
+                            {t.contactDetails.emailValue}
+                          </span>
+                        </div>
+                      </a>
 
-                    {/* Phone */}
-                    <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 border border-border flex items-center justify-center flex-shrink-0">
-                        <Phone className="w-4 h-4 text-foreground/70" strokeWidth={1.5} />
-                      </div>
-                      <div>
-                        <p className="text-body-sm text-muted-foreground mb-1">
-                          {t.contactDetails.phone}
-                        </p>
-                        <a
-                          href={`tel:${t.contactDetails.phoneValue.replace(/\s/g, "")}`}
-                          className="text-foreground hover:text-accent transition-colors"
-                          dir="ltr"
-                        >
-                          {t.contactDetails.phoneValue}
-                        </a>
-                      </div>
-                    </div>
+                      {/* Phone */}
+                      <a
+                        href={`tel:${t.contactDetails.phoneValue.replace(/\s/g, "")}`}
+                        className="group flex items-start gap-4 p-2 -mx-2 rounded-lg hover:bg-secondary/50 transition-colors"
+                      >
+                        <div className="w-12 h-12 bg-emerald-500/10 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-emerald-500 group-hover:text-white text-emerald-600 transition-colors duration-300">
+                          <Phone className="w-5 h-5" strokeWidth={2} />
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium text-muted-foreground mb-1">
+                            {t.contactDetails.phone}
+                          </p>
+                          <span className="text-foreground font-semibold group-hover:text-emerald-600 transition-colors" dir="ltr">
+                            {t.contactDetails.phoneValue}
+                          </span>
+                        </div>
+                      </a>
 
-                    {/* Location */}
-                    <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 border border-border flex items-center justify-center flex-shrink-0">
-                        <MapPin className="w-4 h-4 text-foreground/70" strokeWidth={1.5} />
-                      </div>
-                      <div>
-                        <p className="text-body-sm text-muted-foreground mb-1">
-                          {t.contactDetails.location}
-                        </p>
-                        <p className="text-foreground">
-                          {t.contactDetails.locationValue}
-                        </p>
+                      {/* Location */}
+                      <div className="flex items-start gap-4 p-2 -mx-2">
+                        <div className="w-12 h-12 bg-purple-500/10 rounded-xl flex items-center justify-center flex-shrink-0 text-purple-600">
+                          <MapPin className="w-5 h-5" strokeWidth={2} />
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium text-muted-foreground mb-1">
+                            {t.contactDetails.location}
+                          </p>
+                          <p className="text-foreground font-semibold leading-relaxed">
+                            {t.contactDetails.locationValue}
+                          </p>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
+                </ScrollReveal>
               </div>
             </div>
           </div>

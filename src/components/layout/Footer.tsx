@@ -52,7 +52,7 @@ export function Footer() {
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20 relative z-10">
         {/* Footer Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-12 lg:gap-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-16">
 
           {/* Column 1 - Company */}
           <div className="flex flex-col gap-6">
@@ -206,9 +206,9 @@ export function Footer() {
         </div>
 
         {/* Divider & Bottom Bar */}
-        <div className="mt-20 pt-8 border-t border-transparent bg-gradient-to-r from-transparent via-white/10 to-transparent h-px p-0" />
+        <div className="mt-16 lg:mt-20 pt-8 border-t border-transparent bg-gradient-to-r from-transparent via-white/10 to-transparent h-px p-0" />
 
-        <div className="pt-8 flex flex-col md:flex-row justify-between items-end gap-6">
+        <div className="pt-8 flex flex-col items-center text-center md:flex-row md:justify-between md:items-end md:text-start gap-6">
 
           {/* Logo & Trust Line */}
           <div className="flex flex-col gap-3">

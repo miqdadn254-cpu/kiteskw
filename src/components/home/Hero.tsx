@@ -92,7 +92,7 @@ export function Hero() {
                     )}>
 
                         {/* Headline - Explicitly sharp rendering with Depth */}
-                        <h1 className="font-heading font-bold text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] xl:text-[6.5rem] leading-[0.95] tracking-tight mb-8 uppercase antialiased"
+                        <h1 className="font-heading font-bold text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-[5.5rem] xl:text-[6.5rem] leading-[0.95] tracking-tight mb-6 sm:mb-8 uppercase antialiased w-full"
                             style={{
                                 textRendering: 'geometricPrecision',
                                 WebkitFontSmoothing: 'antialiased',
@@ -112,16 +112,16 @@ export function Hero() {
                         </h1>
 
                         {/* Subheadline */}
-                        <p className="font-body text-lg sm:text-xl lg:text-2xl text-white/70 max-w-3xl mb-12 leading-relaxed animate-hero-fade"
+                        <p className="font-body text-base sm:text-lg lg:text-xl text-white/70 max-w-full sm:max-w-2xl lg:max-w-3xl mb-8 sm:mb-12 leading-relaxed animate-hero-fade px-2 sm:px-0"
                             style={{ animationDelay: '300ms' }}>
                             {content.subtitle}
                         </p>
 
                         {/* CTAs */}
-                        <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 animate-hero-scale"
+                        <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 w-full sm:w-auto animate-hero-scale px-4 sm:px-0"
                             style={{ animationDelay: '500ms' }}>
-                            <Link to="/contact">
-                                <button className="group min-w-[200px] h-14 px-8 border border-white/20 bg-white/5 backdrop-blur-sm text-white font-medium hover:bg-white hover:text-[#0B0F14] hover:border-white hover:-translate-y-[1px] transition-all duration-300 flex items-center justify-center rounded-sm">
+                            <Link to="/contact" className="w-full sm:w-auto">
+                                <button className="group w-full sm:min-w-[200px] h-12 sm:h-14 px-6 sm:px-8 border border-white/20 bg-white/5 backdrop-blur-sm text-white font-medium hover:bg-white hover:text-[#0B0F14] hover:border-white hover:-translate-y-[1px] transition-all duration-300 flex items-center justify-center rounded-sm text-sm sm:text-base">
                                     <span>{content.ctaPrimary}</span>
                                     <ArrowRight className={cn("w-5 h-5 transition-transform duration-300",
                                         isRTL ? "mr-2 group-hover:-translate-x-1 rotate-180" : "ml-2 group-hover:translate-x-1"
@@ -129,8 +129,8 @@ export function Hero() {
                                 </button>
                             </Link>
 
-                            <Link to="/services">
-                                <button className="min-w-[200px] h-14 px-8 text-white/60 hover:text-white hover:bg-white/5 hover:-translate-y-[1px] transition-all duration-300 font-medium rounded-sm">
+                            <Link to="/services" className="w-full sm:w-auto">
+                                <button className="w-full sm:min-w-[200px] h-12 sm:h-14 px-6 sm:px-8 text-white/60 hover:text-white hover:bg-white/5 hover:-translate-y-[1px] transition-all duration-300 font-medium rounded-sm text-sm sm:text-base">
                                     {content.ctaSecondary}
                                 </button>
                             </Link>

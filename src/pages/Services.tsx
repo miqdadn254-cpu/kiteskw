@@ -2,210 +2,271 @@ import { SEO } from "@/components/common/SEO";
 import { SkipLink } from "@/components/common/SkipLink";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, CheckCircle2, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Link } from "react-router-dom";
 import { ScrollReveal, StaggerContainer, StaggerItem } from "@/components/ui/scroll-reveal";
-import { useContent } from "@/hooks/useContent";
 import { getIconByName } from "@/lib/iconUtils";
+import { cn } from "@/lib/utils";
 
-// TypeScript interface for services content
-interface ServicesContent {
-  pageTitle: string;
-  intro: string;
-  learnMore: string;
-  approach: {
-    label: string;
-    steps: Array<{
-      iconName: string;
-      label: string;
-      description: string;
-    }>;
-  };
-  categories: Record<string, string>;
-  bridgeCta: {
-    title: string;
-    subtitle: string;
-    button: string;
-  };
-  finalCta: {
-    title: string;
-    subtitle: string;
-    button: string;
-  };
-  outcomes: {
-    label: string;
-    items: Array<{
-      iconName: string;
-      label: string;
-    }>;
-  };
-  services: Array<{
-    id: string;
-    iconName: string;
-    title: string;
-    authority: string;
-    description: string;
-    features: string[];
-    outcomes: string[];
-  }>;
-}
+const content = {
+  en: {
+    hero: {
+      title: "Our Services",
+      intro: "End-to-end engineering simulation solutions—from concept validation to operational deployment.",
+    },
+    approach: {
+      label: "Our Methodology",
+      steps: [
+        { label: "Define", icon: "ClipboardList", desc: "Identify critical parameters." },
+        { label: "Simulate", icon: "Cpu", desc: "Run high-fidelity models." },
+        { label: "Validate", icon: "CheckCircle2", desc: "Compare against real-world data." },
+        { label: "Implement", icon: "Rocket", desc: "Deploy optimized solutions." },
+      ]
+    },
+    services: [
+      {
+        id: "prototype-development",
+        icon: "Cpu",
+        category: "Development",
+        title: "Prototype Development",
+        solves: "Eliminate costly iteration cycles by validating designs digitally before manufacturing.",
+        how: [
+          "Physics-based digital twins",
+          "Material behavior analysis",
+          "Stress & failure prediction"
+        ],
+        outcomes: ["Reduced Time-to-Market", "Lower R&D Costs", "Design Confidence"]
+      },
+      {
+        id: "consultation",
+        icon: "LineChart",
+        category: "Strategy",
+        title: "Engineering Consultation",
+        solves: "Solve complex operational challenges with rigorous, data-driven engineering analysis.",
+        how: [
+          "Root cause analysis",
+          "Performance optimization",
+          "Regulatory compliance checks"
+        ],
+        outcomes: ["Risk Mitigation", "Operational Efficiency", "Safety Assurance"]
+      },
+      {
+        id: "training",
+        icon: "GraduationCap",
+        category: "Capability",
+        title: "Authorized Training",
+        solves: "Bridge the skills gap by equipping your team with certified simulation expertise.",
+        how: [
+          "Hands-on local workshops",
+          "Official ANSYS curriculum",
+          "Project-based mentorship"
+        ],
+        outcomes: ["Internal Capability", "Certified Workforce", "Software ROI"]
+      },
+      {
+        id: "software-distribution",
+        icon: "Leaf",
+        category: "Technology",
+        title: "Software Distribution",
+        solves: "Access and integrate the world's leading simulation platforms seamlessly.",
+        how: [
+          "Licensing strategy & support",
+          "Technical installation",
+          "Infrastructure integration"
+        ],
+        outcomes: ["Seamless Access", "Technical Support", "Scalable Licensing"]
+      }
+    ],
+    cta: {
+      bridge: {
+        text: "Our experts help you identify the most effective simulation-driven path.",
+        btn: "Not Sure Which Service Fits?"
+      },
+      final: {
+        trust: "Trusted by government, academic, and enterprise organizations across the GCC",
+        title: "Ready to elevate your engineering capabilities?",
+        btn: "Schedule a Consultation"
+      }
+    }
+  },
+  ar: {
+    hero: {
+      title: "خدماتنا",
+      intro: "حلول محاكاة هندسية متكاملة — من التحقق من المفهوم إلى النشر التشغيلي.",
+    },
+    approach: {
+      label: "منهجيتنا",
+      steps: [
+        { label: "تحديد", icon: "ClipboardList", desc: "تحديد المعلمات الحرجة." },
+        { label: "محاكاة", icon: "Cpu", desc: "تشغيل نماذج عالية الدقة." },
+        { label: "تحقق", icon: "CheckCircle2", desc: "مقارنة مع بيانات العالم الحقيقي." },
+        { label: "تطبيق", icon: "Rocket", desc: "نشر حلول محسنة." },
+      ]
+    },
+    services: [
+      {
+        id: "prototype-development",
+        icon: "Cpu",
+        category: "تطوير",
+        title: "تطوير النماذج الأولية",
+        solves: "القضاء على دورات التكرار المكلفة من خلال التحقق من التصاميم رقمياً قبل التصنيع.",
+        how: [
+          "توائم رقمية قائمة على الفيزياء",
+          "تحليل سلوك المواد",
+          "تنبؤ الإجهاد والفشل"
+        ],
+        outcomes: ["تقليل وقت الوصول للسوق", "خفض تكاليف البحث والتطوير", "ثقة في التصميم"]
+      },
+      {
+        id: "consultation",
+        icon: "LineChart",
+        category: "استشارات",
+        title: "الاستشارات الهندسية",
+        solves: "حل التحديات التشغيلية المعقدة بتحليل هندسي دقيق مدعوم بالبيانات.",
+        how: [
+          "تحليل السبب الجذري",
+          "تحسين الأداء",
+          "التحقق من الامتثال التنظيمي"
+        ],
+        outcomes: ["تخفيف المخاطر", "الكفاءة التشغيلية", "ضمان السلامة"]
+      },
+      {
+        id: "training",
+        icon: "GraduationCap",
+        category: "قدرات",
+        title: "التدريب المعتمد",
+        solves: "سد فجوة المهارات من خلال تزويد فريقك بخبرات محاكاة معتمدة.",
+        how: [
+          "ورش عمل محلية عملية",
+          "منهج ANSYS الرسمي",
+          "توجيه قائم على المشاريع"
+        ],
+        outcomes: ["قدرات داخلية", "قوى عاملة معتمدة", "عائد استثمار البرمجيات"]
+      },
+      {
+        id: "software-distribution",
+        icon: "Leaf",
+        category: "تكنولوجيا",
+        title: "توزيع البرمجيات",
+        solves: "الوصول إلى منصات المحاكاة الرائدة عالمياً ودمجها بسلاسة.",
+        how: [
+          "استراتيجية الترخيص والدعم",
+          "التثبيت الفني",
+          "تكامل البنية التحتية"
+        ],
+        outcomes: ["وصول سلس", "دعم فني", "ترخيص قابل للتوسع"]
+      }
+    ],
+    cta: {
+      bridge: {
+        text: "خبراؤنا يساعدونك في تحديد المسار الأكثر فعالية المدفوع بالمحاكاة.",
+        btn: "لست متأكداً أي خدمة تناسبك؟"
+      },
+      final: {
+        trust: "موثوق به من قبل المؤسسات الحكومية والأكاديمية والشركات في جميع أنحاء دول مجلس التعاون الخليجي",
+        title: "هل أنت مستعد للارتقاء بقدراتك الهندسية؟",
+        btn: "اتصل بنا"
+      }
+    }
+  },
+};
 
-// Abstract technical SVG visuals for each service
+// Abstract technical SVG visuals with micro-animations
 const ServiceVisual = ({ type }: { type: string }) => {
   const visuals: Record<string, React.ReactNode> = {
     "prototype-development": (
       <svg viewBox="0 0 200 150" className="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
-        {/* 3D Wireframe Cube */}
         <g stroke="currentColor" strokeWidth="0.5" className="text-foreground/20">
-          {/* Grid lines */}
           {[...Array(11)].map((_, i) => (
-            <line key={`h${i}`} x1="20" y1={15 + i * 12} x2="180" y2={15 + i * 12} />
+            <line key={`h${i}`} x1="20" y1={15 + i * 12} x2="180" y2={15 + i * 12} className="opacity-0 animate-fade-in" style={{ animationDelay: `${i * 100}ms` }} />
           ))}
           {[...Array(9)].map((_, i) => (
-            <line key={`v${i}`} x1={20 + i * 20} y1="15" x2={20 + i * 20} y2="135" />
+            <line key={`v${i}`} x1={20 + i * 20} y1="15" x2={20 + i * 20} y2="135" className="opacity-0 animate-fade-in" style={{ animationDelay: `${i * 100 + 500}ms` }} />
           ))}
         </g>
-        {/* 3D Cube wireframe */}
-        <g stroke="currentColor" strokeWidth="1" className="text-foreground/40">
-          {/* Front face */}
+        <g stroke="currentColor" strokeWidth="1" className="text-foreground/40 animate-pulse-slow">
           <rect x="60" y="50" width="50" height="50" fill="none" />
-          {/* Back face */}
           <rect x="80" y="30" width="50" height="50" fill="none" />
-          {/* Connecting lines */}
           <line x1="60" y1="50" x2="80" y2="30" />
           <line x1="110" y1="50" x2="130" y2="30" />
           <line x1="60" y1="100" x2="80" y2="80" />
           <line x1="110" y1="100" x2="130" y2="80" />
         </g>
-        {/* Dimension annotations */}
-        <g stroke="currentColor" strokeWidth="0.5" className="text-foreground/30">
-          <line x1="60" y1="110" x2="110" y2="110" />
-          <line x1="60" y1="108" x2="60" y2="112" />
-          <line x1="110" y1="108" x2="110" y2="112" />
-        </g>
       </svg>
     ),
     "consultation": (
       <svg viewBox="0 0 200 150" className="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
-        {/* Flow diagram / Process chart */}
         <g stroke="currentColor" strokeWidth="0.5" className="text-foreground/15">
-          {/* Background grid dots */}
           {[...Array(10)].map((_, i) =>
             [...Array(8)].map((_, j) => (
-              <circle key={`dot${i}${j}`} cx={20 + i * 18} cy={15 + j * 17} r="1" fill="currentColor" />
+              <circle key={`dot${i}${j}`} cx={20 + i * 18} cy={15 + j * 17} r="1" fill="currentColor" className="opacity-0 animate-fade-in" style={{ animationDelay: `${(i + j) * 50}ms` }} />
             ))
           )}
         </g>
-        {/* Process nodes */}
-        <g stroke="currentColor" strokeWidth="1" className="text-foreground/40">
-          <circle cx="40" cy="75" r="15" fill="none" />
-          <circle cx="100" cy="45" r="12" fill="none" />
-          <circle cx="100" cy="105" r="12" fill="none" />
-          <circle cx="160" cy="75" r="15" fill="none" />
+        <g stroke="currentColor" strokeWidth="1" className="text-foreground/50">
+          <circle cx="40" cy="75" r="15" fill="none" className="animate-pulse-slow" style={{ animationDelay: '0s' }} />
+          <circle cx="100" cy="45" r="12" fill="none" className="animate-pulse-slow" style={{ animationDelay: '1s' }} />
+          <circle cx="100" cy="105" r="12" fill="none" className="animate-pulse-slow" style={{ animationDelay: '2s' }} />
+          <circle cx="160" cy="75" r="15" fill="none" className="animate-pulse-slow" style={{ animationDelay: '3s' }} />
         </g>
-        {/* Connecting arrows */}
         <g stroke="currentColor" strokeWidth="0.75" className="text-foreground/30">
-          <path d="M55 68 L85 50" />
-          <path d="M55 82 L85 100" />
-          <path d="M115 50 L145 68" />
-          <path d="M115 100 L145 82" />
-          {/* Arrow heads */}
-          <polygon points="85,50 80,48 80,52" fill="currentColor" className="text-foreground/30" />
-          <polygon points="85,100 80,98 80,102" fill="currentColor" className="text-foreground/30" />
+          <path d="M55 68 L85 50" className="animate-draw" />
+          <path d="M55 82 L85 100" className="animate-draw" style={{ animationDelay: '0.5s' }} />
+          <path d="M115 50 L145 68" className="animate-draw" style={{ animationDelay: '1s' }} />
+          <path d="M115 100 L145 82" className="animate-draw" style={{ animationDelay: '1.5s' }} />
         </g>
       </svg>
     ),
     "training": (
       <svg viewBox="0 0 200 150" className="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
-        {/* Learning curve / Progress visualization */}
         <g stroke="currentColor" strokeWidth="0.5" className="text-foreground/20">
-          {/* Axis */}
           <line x1="30" y1="120" x2="180" y2="120" />
           <line x1="30" y1="120" x2="30" y2="20" />
-          {/* Axis ticks */}
-          {[...Array(6)].map((_, i) => (
-            <line key={`xt${i}`} x1={30 + i * 30} y1="120" x2={30 + i * 30} y2="123" />
-          ))}
-          {[...Array(5)].map((_, i) => (
-            <line key={`yt${i}`} x1="27" y1={120 - i * 25} x2="30" y2={120 - i * 25} />
-          ))}
         </g>
-        {/* Learning curve */}
         <path
           d="M30 115 Q60 110 75 95 T120 55 T170 25"
           stroke="currentColor"
           strokeWidth="1.5"
           fill="none"
-          className="text-foreground/40"
+          className="text-foreground/40 animate-draw"
+          strokeDasharray="300"
+          strokeDashoffset="300"
         />
-        {/* Data points */}
         <g className="text-foreground/40">
-          <circle cx="45" cy="108" r="3" fill="currentColor" />
-          <circle cx="75" cy="85" r="3" fill="currentColor" />
-          <circle cx="105" cy="60" r="3" fill="currentColor" />
-          <circle cx="135" cy="40" r="3" fill="currentColor" />
-          <circle cx="165" cy="28" r="3" fill="currentColor" />
-        </g>
-        {/* Milestone markers */}
-        <g stroke="currentColor" strokeWidth="0.5" strokeDasharray="2,2" className="text-foreground/20">
-          <line x1="75" y1="85" x2="75" y2="120" />
-          <line x1="135" y1="40" x2="135" y2="120" />
+          <circle cx="45" cy="108" r="3" fill="currentColor" className="animate-pulse-slow" />
+          <circle cx="135" cy="40" r="3" fill="currentColor" className="animate-pulse-slow" style={{ animationDelay: '1s' }} />
         </g>
       </svg>
     ),
     "software-distribution": (
       <svg viewBox="0 0 200 150" className="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
-        {/* Network / Integration diagram */}
         <g stroke="currentColor" strokeWidth="0.5" className="text-foreground/15">
-          {/* Circuit-like background */}
-          <path d="M20 75 H60 V45 H100" />
-          <path d="M20 85 H50 V115 H90" />
-          <path d="M180 75 H140 V45 H100" />
-          <path d="M180 85 H150 V115 H110" />
+          <path d="M20 75 H60 V45 H100" className="animate-draw" />
+          <path d="M180 85 H150 V115 H110" className="animate-draw" style={{ animationDelay: '0.5s' }} />
         </g>
-        {/* Central hub */}
         <g stroke="currentColor" strokeWidth="1" className="text-foreground/40">
-          <rect x="85" y="60" width="30" height="30" rx="2" fill="none" />
-          {/* Inner detail */}
-          <rect x="92" y="67" width="16" height="16" rx="1" fill="none" />
+          <rect x="85" y="60" width="30" height="30" rx="2" fill="none" className="animate-pulse-slow" />
         </g>
-        {/* Connected nodes */}
         <g stroke="currentColor" strokeWidth="0.75" className="text-foreground/30">
-          {/* Top nodes */}
           <rect x="70" y="20" width="20" height="15" rx="1" fill="none" />
-          <rect x="110" y="20" width="20" height="15" rx="1" fill="none" />
-          {/* Bottom nodes */}
-          <rect x="70" y="115" width="20" height="15" rx="1" fill="none" />
           <rect x="110" y="115" width="20" height="15" rx="1" fill="none" />
-          {/* Side nodes */}
-          <rect x="25" y="67" width="20" height="15" rx="1" fill="none" />
-          <rect x="155" y="67" width="20" height="15" rx="1" fill="none" />
-        </g>
-        {/* Connection lines */}
-        <g stroke="currentColor" strokeWidth="0.5" className="text-foreground/25">
-          <line x1="80" y1="35" x2="92" y2="60" />
-          <line x1="120" y1="35" x2="108" y2="60" />
-          <line x1="80" y1="115" x2="92" y2="90" />
-          <line x1="120" y1="115" x2="108" y2="90" />
-          <line x1="45" y1="75" x2="85" y2="75" />
-          <line x1="155" y1="75" x2="115" y2="75" />
         </g>
       </svg>
     ),
   };
 
   return (
-    <div className="aspect-[4/3] border border-border bg-secondary/20 flex items-center justify-center p-8">
+    <div className="aspect-[4/3] border border-border/60 bg-gradient-to-br from-secondary/10 to-secondary/30 flex items-center justify-center p-8 overflow-hidden rounded-xl shadow-sm">
       {visuals[type] || null}
     </div>
   );
 };
 
 const Services = () => {
-  const { language } = useLanguage();
-  const t = useContent<ServicesContent>('services');
+  const { language, isRTL } = useLanguage();
+  const t = content[language];
 
   return (
     <>
@@ -214,191 +275,191 @@ const Services = () => {
       <div className="min-h-screen">
         <Header />
         <main id="main-content">
-          {/* Page Header */}
-          <section className="pt-32 pb-16 lg:pt-40 lg:pb-20 bg-primary">
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-              <ScrollReveal className="max-w-3xl mx-auto text-center">
-                <div className="h-px w-16 bg-primary-foreground/40 mx-auto mb-6" />
-                <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-primary-foreground mb-6 tracking-tight">
-                  {t.pageTitle}
+          {/* Page Hero */}
+          <section className="pt-24 pb-12 sm:pt-32 sm:pb-16 lg:pt-40 lg:pb-24 bg-primary relative overflow-hidden">
+            {/* Subtle noise texture */}
+            <div className="absolute inset-0 opacity-[0.03] bg-[url('/noise.png')] mix-blend-overlay pointer-events-none" />
+
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+              <ScrollReveal className="max-w-4xl mx-auto text-center">
+                <h1 className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-primary-foreground mb-4 sm:mb-6 tracking-tight">
+                  {t.hero.title}
                 </h1>
-                <p className="font-body text-lg lg:text-xl text-primary-foreground/70 leading-relaxed">
-                  {t.intro}
+                <p className="font-body text-base sm:text-lg lg:text-xl text-primary-foreground/80 leading-relaxed font-light px-2 sm:px-0">
+                  {t.hero.intro}
                 </p>
               </ScrollReveal>
             </div>
           </section>
 
-          {/* Approach Strip */}
-          <section className="py-12 lg:py-16 bg-secondary/50 border-b border-border">
+          {/* Methodology Strip - Unified Enterprise Process */}
+          <section className="py-16 sm:py-20 lg:py-24 bg-gradient-to-b from-secondary/30 to-background border-b border-border">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-              <ScrollReveal className="text-center mb-10">
-                <span className="font-body text-[10px] sm:text-xs tracking-[0.2em] uppercase text-muted-foreground">
+              <ScrollReveal className="text-center mb-12 sm:mb-16 lg:mb-20">
+                <h2 className="font-heading text-xs font-bold uppercase tracking-[0.25em] text-muted-foreground/90 mb-3">
                   {t.approach.label}
-                </span>
+                </h2>
+                <div className="h-0.5 w-8 bg-blue-600/30 mx-auto rounded-full" />
               </ScrollReveal>
-              <StaggerContainer className="grid grid-cols-2 md:grid-cols-4 gap-6 lg:gap-10" staggerDelay={100}>
-                {t.approach.steps.map((step, index) => (
-                  <StaggerItem key={index} index={index}>
-                    <div className="text-center group">
-                      {/* Step number and icon */}
-                      <div className="relative inline-flex items-center justify-center mb-4">
-                        <div className="w-14 h-14 border border-border flex items-center justify-center bg-background group-hover:border-foreground/30 transition-colors duration-300">
-                          {(() => {
-                            const StepIcon = getIconByName(step.iconName);
-                            return <StepIcon className="text-foreground/60" size={22} strokeWidth={1.5} />;
-                          })()}
+
+              <StaggerContainer className="relative max-w-5xl mx-auto" staggerDelay={150}>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-y-12 lg:gap-y-16 gap-x-6 lg:gap-x-8">
+                  {t.approach.steps.map((step, index) => (
+                    <StaggerItem key={index} index={index}>
+                      <div className="flex flex-col items-center text-center group relative z-10">
+                        {/* Number Badge */}
+                        <span className="font-heading text-[10px] font-bold text-muted-foreground/30 mb-4 transition-colors group-hover:text-blue-600/60 bg-background px-2 relative z-20">
+                          0{index + 1}
+                        </span>
+
+                        {/* Icon Circle */}
+                        <div className="w-16 h-16 rounded-full border border-border bg-background flex items-center justify-center mb-6 transition-all duration-500 group-hover:border-blue-500/30 group-hover:shadow-[0_4px_20px_-4px_rgba(37,99,235,0.1)] group-hover:-translate-y-1 relative">
+                          <div className="text-muted-foreground group-hover:text-blue-600 transition-colors duration-300">
+                            {(() => {
+                              const StepIcon = getIconByName(step.icon);
+                              return <StepIcon size={22} strokeWidth={1.5} />;
+                            })()}
+                          </div>
                         </div>
-                        {/* Connector line (except last) */}
-                        {index < t.approach.steps.length - 1 && (
-                          <div className="hidden md:block absolute top-1/2 start-full w-full h-px bg-border -translate-y-1/2 ms-3" />
-                        )}
+
+                        {/* Text Content */}
+                        <h3 className="font-heading text-sm font-bold text-foreground mb-3 tracking-tight group-hover:text-blue-900 transition-colors">
+                          {step.label}
+                        </h3>
+                        <p className="font-body text-xs text-muted-foreground/80 leading-relaxed max-w-[180px] mx-auto">
+                          {step.desc}
+                        </p>
                       </div>
-                      <h3 className="font-heading text-sm sm:text-base font-semibold text-foreground mb-1">
-                        {step.label}
-                      </h3>
-                      <p className="font-body text-xs text-muted-foreground">
-                        {step.description}
-                      </p>
-                    </div>
-                  </StaggerItem>
-                ))}
+                    </StaggerItem>
+                  ))}
+                </div>
               </StaggerContainer>
             </div>
           </section>
 
-          {/* Services List */}
-          <section className="py-16 lg:py-24 bg-background">
+          {/* Services List - Standardized Enterprise System */}
+          <section className="bg-background">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="space-y-0">
-                {t.services.map((service, index) => (
+              {t.services.map((service, index) => {
+                // Unified Layout Logic - Consistent spacing and structure for ALL items
+                return (
                   <ScrollReveal key={service.id}>
-                    {/* Section divider */}
-                    {index > 0 && (
-                      <div className="py-12 lg:py-16">
-                        <div className="h-px bg-border" />
-                      </div>
-                    )}
+                    {/* Consistent Divider */}
+                    {index > 0 && <div className="w-full max-w-5xl mx-auto h-px bg-gradient-to-r from-transparent via-border/40 to-transparent my-0" />}
 
-                    <div className="py-8 lg:py-12">
-                      <div className="grid lg:grid-cols-2 gap-10 lg:gap-20 items-start">
-                        {/* Content */}
-                        <div className={index % 2 === 1 ? "lg:order-2" : ""}>
-                          {/* Category label */}
-                          <span className="inline-block font-body text-[10px] tracking-[0.25em] uppercase text-muted-foreground mb-6 border border-border px-3 py-1.5 bg-secondary/30">
-                            {t.categories[service.id as keyof typeof t.categories]}
-                          </span>
+                    <div className="py-24 lg:py-32">
+                      <div className="grid lg:grid-cols-2 gap-12 lg:gap-24 items-center">
+                        {/* Content Column */}
+                        <div className={`relative ${index % 2 === 1 ? "lg:order-2" : ""}`}>
+                          <div className="max-w-xl">
+                            {/* Category Tag */}
+                            <div className="flex items-center gap-3 mb-6">
+                              <span className="text-[10px] font-bold uppercase tracking-[0.2em] px-2.5 py-1 rounded bg-secondary/50 text-muted-foreground border border-border/50">
+                                {service.category}
+                              </span>
+                            </div>
 
-                          {/* Title with icon */}
-                          <div className="flex items-center gap-4 mb-4">
-                            {/* Icon */}
-                            {(() => {
-                              const ServiceIcon = getIconByName(service.iconName);
-                              return (
-                                <div className="w-14 h-14 border border-border flex items-center justify-center bg-background">
-                                  <ServiceIcon className="text-foreground/70" size={26} strokeWidth={1.5} />
-                                </div>
-                              );
-                            })()}
-                            <h2 className="font-heading text-2xl lg:text-3xl xl:text-4xl font-semibold text-foreground tracking-tight">
+                            {/* Title - Unified Typography */}
+                            <h2 className="font-heading text-3xl lg:text-4xl font-bold tracking-tight text-foreground mb-8">
                               {service.title}
                             </h2>
-                          </div>
 
-                          {/* Authority line */}
-                          <p className="font-body text-base lg:text-lg text-foreground/80 leading-relaxed mb-4 italic">
-                            {service.authority}
-                          </p>
+                            {/* Strategic Insight Quote - Consistent styling */}
+                            <p className="font-body text-lg leading-relaxed mb-10 border-l-[3px] border-blue-600/20 pl-6 py-1 italic text-muted-foreground">
+                              "{service.solves}"
+                            </p>
 
-                          {/* Description */}
-                          <p className="font-body text-muted-foreground leading-relaxed mb-8">
-                            {service.description}
-                          </p>
+                            {/* 'How We Deliver' - Standardized List */}
+                            <div className="mb-10">
+                              <h4 className="text-[11px] font-bold uppercase text-muted-foreground/70 tracking-[0.15em] mb-5">How We Deliver</h4>
+                              <ul className="space-y-4">
+                                {service.how.map((item, i) => (
+                                  <li key={i} className="flex items-start gap-4 text-[15px] text-foreground/80 group">
+                                    <div className="w-5 h-5 rounded-full bg-secondary/50 flex items-center justify-center shrink-0 mt-0.5 group-hover:bg-blue-50/50 group-hover:text-blue-600 transition-colors">
+                                      <Check size={12} strokeWidth={2.5} />
+                                    </div>
+                                    <span className="leading-relaxed border-b border-transparent group-hover:border-border/60 transition-colors">{item}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
 
-                          {/* Features with staggered animation */}
-                          <StaggerContainer className="space-y-3 mb-8" staggerDelay={75}>
-                            {service.features.map((feature, featureIndex) => (
-                              <StaggerItem key={feature} index={featureIndex}>
-                                <div className="flex items-start gap-3 group">
-                                  <span className="w-1.5 h-1.5 rounded-full bg-foreground/40 shrink-0 mt-2.5 group-hover:bg-foreground/70 transition-colors duration-200" />
-                                  <span className="font-body text-foreground/90">{feature}</span>
-                                </div>
-                              </StaggerItem>
-                            ))}
-                          </StaggerContainer>
+                            {/* 'Business Impact' - Uniform Chips */}
+                            <div>
+                              <h4 className="text-[11px] font-bold uppercase text-muted-foreground/70 tracking-[0.15em] mb-5">Business Impact</h4>
+                              <div className="flex flex-wrap gap-3">
+                                {service.outcomes.map((outcome, i) => (
+                                  <span key={i} className="inline-flex items-center gap-2 px-3.5 py-2 rounded-md text-[11px] font-bold uppercase tracking-wide border border-border/60 bg-background text-muted-foreground/80 shadow-sm transition-all hover:border-blue-200 hover:text-blue-700 hover:bg-blue-50/30">
+                                    <CheckCircle2 size={13} className="text-emerald-500/70" /> {outcome}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
 
-                          {/* Service Outcomes */}
-                          <div className="mb-8 pt-6 border-t border-border/50">
-                            <span className="font-body text-[10px] tracking-[0.15em] uppercase text-muted-foreground/70 mb-3 block">
-                              {t.outcomes.label}
-                            </span>
-                            <div className="flex flex-wrap gap-3">
-                              {service.outcomes.map((outcome, outcomeIndex) => (
-                                <span
-                                  key={outcomeIndex}
-                                  className="inline-flex items-center gap-1.5 font-body text-xs text-foreground/70 bg-secondary/50 px-3 py-1.5 border border-border/50"
-                                >
-                                  {outcome}
-                                </span>
-                              ))}
+                            {/* Primary Action */}
+                            <div className="mt-10 pt-10 border-t border-border/30">
+                              <Link to={`/services/${service.id}`}>
+                                <Button variant="outline" className="h-12 px-6 group min-w-[160px] shadow-sm hover:border-blue-200 hover:text-blue-700 hover:bg-white text-sm font-medium">
+                                  Learn More <ArrowRight size={15} className="ml-2 group-hover:translate-x-1 transition-transform" />
+                                </Button>
+                              </Link>
                             </div>
                           </div>
-
-                          <Link to={`/services/${service.id}`}>
-                            <Button variant="outline" className="group">
-                              {t.learnMore}
-                              <ArrowRight size={16} strokeWidth={1.5} className="transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1 rtl:rotate-180" />
-                            </Button>
-                          </Link>
                         </div>
 
-                        {/* Abstract Technical Visual */}
-                        <div className={`${index % 2 === 1 ? "lg:order-1" : ""} sticky top-32`}>
-                          <ServiceVisual type={service.id} />
+                        {/* Visual Column - Normalized Container */}
+                        <div className={`${index % 2 === 1 ? "lg:order-1" : ""} lg:sticky lg:top-32 group`}>
+                          <div className="relative aspect-[4/3] w-full rounded-2xl overflow-hidden border border-border/40 bg-gradient-to-br from-secondary/5 to-secondary/20 shadow-subtle group-hover:shadow-elevated transition-all duration-700 flex items-center justify-center p-10">
+                            {/* Inner Glow */}
+                            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-transparent to-white/40 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                            <ServiceVisual type={service.id} />
+                          </div>
                         </div>
                       </div>
                     </div>
                   </ScrollReveal>
-                ))}
-              </div>
+                );
+              })}
             </div>
           </section>
 
           {/* Bridge CTA */}
-          <section className="py-16 lg:py-20 bg-secondary/40 border-y border-border">
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-              <ScrollReveal className="max-w-2xl mx-auto text-center">
-                <h3 className="font-heading text-xl sm:text-2xl font-semibold text-foreground mb-2 tracking-tight">
-                  {t.bridgeCta.title}
-                </h3>
-                <p className="font-body text-muted-foreground mb-8">
-                  {t.bridgeCta.subtitle}
-                </p>
-                <Link to="/contact">
-                  <Button variant="outline" className="group">
-                    {t.bridgeCta.button}
-                    <ArrowRight size={16} strokeWidth={1.5} className="transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1 rtl:rotate-180" />
-                  </Button>
-                </Link>
+          <section className="py-20 bg-gradient-to-b from-secondary/30 to-background border-y border-border">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+              <ScrollReveal>
+                <div className="inline-block p-4 rounded-full bg-secondary/50 mb-6">
+                  <p className="text-sm font-medium text-muted-foreground tracking-wide">
+                    {t.cta.bridge.text}
+                  </p>
+                </div>
+                <div>
+                  <Link to="/contact">
+                    <Button variant="outline" size="lg" className="group bg-background border-foreground/20 hover:border-foreground/40 min-w-[240px]">
+                      {t.cta.bridge.btn}
+                      <ArrowRight size={16} className="ml-2 transition-transform group-hover:translate-x-1" />
+                    </Button>
+                  </Link>
+                </div>
               </ScrollReveal>
             </div>
           </section>
 
           {/* Final CTA Section */}
-          <section className="py-20 lg:py-28 bg-primary">
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-              <ScrollReveal className="max-w-2xl mx-auto text-center">
-                <div className="h-px w-16 bg-primary-foreground/40 mx-auto mb-8" />
-                <h2 className="font-heading text-2xl sm:text-3xl lg:text-4xl font-semibold text-primary-foreground mb-4 tracking-tight">
-                  {t.finalCta.title}
+          <section className="py-24 lg:py-32 bg-[#0B0F14] text-center relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-t from-[#101826] to-transparent" />
+
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+              <ScrollReveal>
+                <span className="block text-xs font-bold uppercase tracking-[0.15em] text-blue-400/80 mb-8 opacity-80">
+                  {t.cta.final.trust}
+                </span>
+                <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-semibold text-white mb-8 tracking-tight">
+                  {t.cta.final.title}
                 </h2>
-                <p className="font-body text-primary-foreground/60 mb-10 text-lg">
-                  {t.finalCta.subtitle}
-                </p>
                 <Link to="/contact">
-                  <Button variant="heroOutline" size="xl" className="group">
-                    {t.finalCta.button}
-                    <ArrowRight size={18} strokeWidth={1.5} className="transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1 rtl:rotate-180" />
+                  <Button variant="heroOutline" size="xl" className="group border-white/20 hover:border-white/50 text-white hover:bg-white/5">
+                    {t.cta.final.btn}
+                    <ArrowRight size={18} className="ml-2 transition-transform group-hover:translate-x-1" />
                   </Button>
                 </Link>
               </ScrollReveal>
